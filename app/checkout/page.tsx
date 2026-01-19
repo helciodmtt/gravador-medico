@@ -230,9 +230,18 @@ export default function CheckoutPage() {
         throw new Error(result.error || 'Erro ao processar pagamento')
       }
 
-      if (result.success && result.redirectUrl) {
-        // Redireciona para o checkout da Appmax
-        window.location.href = result.redirectUrl
+      // NOVO: Processa via API
+      if (result.success) {
+        if (paymentMethod === 'pix' && result.pix_qr_code) {
+          // Redireciona para página de sucesso com PIX
+          window.location.href = `/success/pix?order_id=${result.order_id}&qr_code=${encodeURIComponent(result.pix_qr_code)}`
+        } else if (paymentMethod === 'credit') {
+          // Redireciona para página de sucesso com cartão
+          window.location.href = `/success/credit?order_id=${result.order_id}&status=${result.status}`
+        } else if (result.redirectUrl) {
+          // Fallback: redireciona para Appmax (caso a API não funcione)
+          window.location.href = result.redirectUrl
+        }
       }
     } catch (error: any) {
       alert(error.message || 'Erro ao processar pagamento')
