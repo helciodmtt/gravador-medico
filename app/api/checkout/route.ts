@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
       success: result.success,
       order_id: result.order_id,
       status: result.status,
+      has_redirect_url: !!result.redirect_url,
       has_pix: !!result.pix_qr_code,
     })
 
@@ -80,11 +81,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Retorna dados do pedido
+    // Retorna dados do pedido (incluindo redirect_url para PIX)
     return NextResponse.json({
       success: true,
       order_id: result.order_id,
       status: result.status,
+      redirect_url: result.redirect_url, // URL da página PIX Appmax
       pix_qr_code: result.pix_qr_code,
       pix_qr_code_base64: result.pix_qr_code_base64,
       message: 'Pedido criado com sucesso!',
