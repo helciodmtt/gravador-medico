@@ -733,6 +733,32 @@ export default function CheckoutPage() {
                             />
                           </div>
                         </div>
+
+                        {/* Parcelas */}
+                        <div>
+                          <label className="block text-sm font-bold text-gray-900 mb-2">
+                            Parcelas *
+                          </label>
+                          <select
+                            value={cardData.installments}
+                            onChange={(e) => setCardData({ ...cardData, installments: parseInt(e.target.value) })}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors bg-white"
+                            required
+                          >
+                            <option value={1}>1x de R$ {total.toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={2}>2x de R$ {(total / 2).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={3}>3x de R$ {(total / 3).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={4}>4x de R$ {(total / 4).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={5}>5x de R$ {(total / 5).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={6}>6x de R$ {(total / 6).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={7}>7x de R$ {(total / 7).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={8}>8x de R$ {(total / 8).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={9}>9x de R$ {(total / 9).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={10}>10x de R$ {(total / 10).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={11}>11x de R$ {(total / 11).toFixed(2).replace('.', ',')} sem juros</option>
+                            <option value={12}>12x de R$ {(total / 12).toFixed(2).replace('.', ',')} sem juros</option>
+                          </select>
+                        </div>
                       </motion.div>
                     )}
 

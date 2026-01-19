@@ -325,7 +325,7 @@ export async function createAppmaxOrder(data: AppmaxOrderRequest): Promise<Appma
               document_number: data.customer.cpf?.replace(/\D/g, '') || '',
               name: data.card_data.holder_name,
               installments: data.card_data.installments || 1,
-              soft_descriptor: 'GRAVADOR MEDICO',
+              soft_descriptor: 'GRAV MEDICO', // Max 13 caracteres
             },
           },
         }),
