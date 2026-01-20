@@ -682,7 +682,7 @@ export default function LandingPage() {
                     >
                       <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight max-w-lg">
                         <span className="bg-gradient-to-r from-brand-500 to-brand-300 bg-clip-text text-transparent">
-                          Tudo que você precisa em um só lugar
+                          Tudo que você precisa<br />em um só lugar
                         </span>
                       </h2>
                       
@@ -1006,7 +1006,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 px-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 px-4 leading-tight whitespace-nowrap">
               Este método é para você se...
             </h2>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto px-4 leading-relaxed">
@@ -2243,13 +2243,13 @@ export default function LandingPage() {
 
       {/* GARANTIA */}
       <section id="garantia" className="relative py-12 md:py-20 lg:py-24 px-4 bg-white">
-        <div className="container mx-auto max-w-lg md:max-w-3xl">
+        <div className="container mx-auto max-w-sm md:max-w-2xl">
           
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="max-w-lg md:max-w-3xl mx-auto"
+            className="max-w-sm md:max-w-2xl mx-auto"
           >
             <Card3D className="group">
               <div className="relative bg-gradient-to-br from-brand-50 to-brand-50 backdrop-blur-xl rounded-xl md:rounded-2xl p-4 md:p-7 border-2 border-brand-200 text-center overflow-hidden shadow-2xl">
@@ -2319,7 +2319,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA FINAL */}
-      <section className="relative py-12 md:py-20 lg:py-24 px-4 bg-white">
+      <section id="preco" className="relative py-12 md:py-20 lg:py-24 px-4 bg-white">
         <div className="container mx-auto max-w-3xl">
           
           <motion.div
@@ -2328,7 +2328,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center space-y-12"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight px-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight px-4">
               <span className="bg-gradient-to-r from-gray-900 to-brand-700 bg-clip-text text-transparent">
                 Seja o médico que<br />você sempre quis ser
               </span>
@@ -2628,6 +2628,23 @@ export default function LandingPage() {
                     <h3 className="font-bold text-gray-900">{specialty}</h3>
                   </div>
                 ))}
+              </div>
+
+              {/* CTA Personalizar */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <div className="text-center space-y-4">
+                  <p className="text-gray-600">Não encontrou sua especialidade?</p>
+                  <a
+                    href="#preco"
+                    onClick={() => setShowAllSpecialties(false)}
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Personalizar Especialidade
+                  </a>
+                </div>
               </div>
             </motion.div>
           </motion.div>
