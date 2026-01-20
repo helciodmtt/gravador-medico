@@ -80,6 +80,38 @@ export default function CheckoutPage() {
     [Autoplay({ delay: 3000, stopOnInteraction: false })]
   )
 
+  // 🔥 NÍVEL 1: Auto-fill com dados do Supabase (se usuário logado)
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (user) {
+          // Busca dados extras na tabela profiles (se existir)
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single()
+
+          // Preenche formulário automaticamente
+          setFormData({
+            name: profile?.full_name || user.user_metadata?.full_name || '',
+            email: user.email || '',
+            phone: profile?.phone || '',
+            cpf: profile?.document || profile?.cpf || ''
+          })
+
+          console.log('✅ Dados do usuário carregados automaticamente')
+        }
+      } catch (error) {
+        console.log('ℹ️ Usuário não logado - campos vazios')
+      }
+    }
+
+    loadUserData()
+  }, [])
+
   // Countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -600,7 +632,9 @@ export default function CheckoutPage() {
             Complete seu Pedido
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-            Você está a um passo de economizar <span className="text-brand-600 font-bold">3 horas por dia</span> com o Método Gravador Médico
+            Você está a um passo de economizar{' '}
+            <span className="text-brand-600 font-bold whitespace-nowrap">3 horas por dia</span>{' '}
+            com o Método Gravador Médico
           </p>
         </motion.div>
 
@@ -684,6 +718,8 @@ export default function CheckoutPage() {
                       </label>
                       <input
                         type="text"
+                        name="name"
+                        autoComplete="name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full max-w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors text-sm md:text-base box-border"
@@ -698,6 +734,8 @@ export default function CheckoutPage() {
                       </label>
                       <input
                         type="email"
+                        name="email"
+                        autoComplete="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         onBlur={handleSaveAbandonedCart}
@@ -714,6 +752,8 @@ export default function CheckoutPage() {
                         </label>
                         <input
                           type="tel"
+                          name="phone"
+                          autoComplete="tel"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
                           onBlur={handleSaveAbandonedCart}
@@ -729,6 +769,8 @@ export default function CheckoutPage() {
                         </label>
                         <input
                           type="text"
+                          name="document"
+                          autoComplete="off"
                           value={formData.cpf}
                           onChange={(e) => setFormData({ ...formData, cpf: formatCPF(e.target.value) })}
                           className="w-full max-w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors text-sm md:text-base box-border"
@@ -917,6 +959,8 @@ export default function CheckoutPage() {
                           </label>
                           <input
                             type="text"
+                            name="cardnumber"
+                            autoComplete="cc-number"
                             value={cardData.number}
                             onChange={(e) => setCardData({ ...cardData, number: formatCardNumber(e.target.value) })}
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors"
@@ -932,6 +976,8 @@ export default function CheckoutPage() {
                           </label>
                           <input
                             type="text"
+                            name="ccname"
+                            autoComplete="cc-name"
                             value={cardData.holderName}
                             onChange={(e) => setCardData({ ...cardData, holderName: e.target.value.toUpperCase() })}
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors"
@@ -947,6 +993,8 @@ export default function CheckoutPage() {
                             </label>
                             <input
                               type="text"
+                              name="cc-exp-month"
+                              autoComplete="cc-exp-month"
                               value={cardData.expMonth}
                               onChange={(e) => setCardData({ ...cardData, expMonth: e.target.value.replace(/\D/g, '').slice(0, 2) })}
                               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors"
@@ -962,6 +1010,8 @@ export default function CheckoutPage() {
                             </label>
                             <input
                               type="text"
+                              name="cc-exp-year"
+                              autoComplete="cc-exp-year"
                               value={cardData.expYear}
                               onChange={(e) => setCardData({ ...cardData, expYear: e.target.value.replace(/\D/g, '').slice(0, 4) })}
                               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors"
@@ -977,6 +1027,8 @@ export default function CheckoutPage() {
                             </label>
                             <input
                               type="text"
+                              name="cc-csc"
+                              autoComplete="cc-csc"
                               value={cardData.cvv}
                               onChange={(e) => setCardData({ ...cardData, cvv: e.target.value.replace(/\D/g, '').slice(0, 4) })}
                               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:outline-none transition-colors"
@@ -1110,11 +1162,17 @@ export default function CheckoutPage() {
                 <div className="mb-4 md:mb-6 pb-4 md:pb-6 border-b-2 border-gray-100">
                   <div className="flex items-start gap-3 md:gap-4">
                     <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                      <img 
+                        src="/images/novo-icon-gravadormedico.png" 
+                        alt="Gravador Médico" 
+                        className="w-8 h-8 md:w-10 md:h-10 object-contain"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-sm md:text-base text-gray-900 mb-1 truncate">Método Gravador Médico</h4>
-                      <p className="text-xs md:text-sm text-gray-600">Sistema Completo + 4 Bônus</p>
+                      <h4 className="font-bold text-sm md:text-base text-gray-900 mb-1">Método Gravador Médico</h4>
+                      <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
+                        Sistema Completo<br />+ 4 Bônus
+                      </p>
                       <div className="mt-2 flex items-center gap-2">
                         <div className="text-gray-400 line-through text-xs md:text-sm">R$ 938</div>
                         <div className="text-xl md:text-2xl font-black text-brand-600">R$ {basePrice}</div>
