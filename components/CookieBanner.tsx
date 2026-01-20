@@ -44,18 +44,18 @@ export default function CookieBanner() {
   if (!showBanner) return null
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4 animate-slide-up">
-      <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-lg shadow-2xl border border-emerald-400/30">
+    <div className="fixed bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-full max-w-xs md:max-w-4xl px-3 md:px-4 animate-slide-up">
+      <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-lg md:rounded-xl shadow-2xl border border-emerald-400/30">
         
-        <div className="px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="px-3 py-2.5 md:px-6 md:py-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
           
           {/* Conteúdo - horizontal */}
-          <div className="flex items-center gap-4 flex-1">
-            <span className="text-2xl flex-shrink-0">🍪</span>
+          <div className="flex items-center gap-2 md:gap-4 flex-1">
+            <span className="text-lg md:text-2xl flex-shrink-0">🍪</span>
             <div className="flex-1">
-              <p className="text-white text-sm leading-relaxed">
+              <p className="text-white text-xs md:text-sm leading-snug md:leading-relaxed">
                 Usamos cookies para melhorar sua experiência. 
-                <span className="mx-2">•</span>
+                <span className="mx-1 md:mx-2">•</span>
                 <Link 
                   href="/politica-privacidade" 
                   className="underline hover:text-emerald-100 transition-colors"
@@ -67,25 +67,25 @@ export default function CookieBanner() {
           </div>
 
           {/* Botões - horizontal */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
             <button
               onClick={handleAccept}
-              className="px-6 py-2 bg-white hover:bg-emerald-50 text-emerald-700 text-sm font-medium rounded-md transition-colors shadow-sm"
+              className="px-4 md:px-6 py-1.5 md:py-2 bg-white hover:bg-emerald-50 text-emerald-700 text-xs md:text-sm font-medium rounded md:rounded-md transition-colors shadow-sm"
             >
               Aceitar
             </button>
             <button
               onClick={handleReject}
-              className="px-4 py-2 text-white/90 hover:text-white text-sm font-medium transition-colors"
+              className="px-3 md:px-4 py-1.5 md:py-2 text-white/90 hover:text-white text-xs md:text-sm font-medium transition-colors"
             >
               Recusar
             </button>
             <button
               onClick={() => setShowBanner(false)}
-              className="text-white/70 hover:text-white transition-colors ml-1"
+              className="text-white/70 hover:text-white transition-colors ml-0.5 md:ml-1"
               aria-label="Fechar"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
