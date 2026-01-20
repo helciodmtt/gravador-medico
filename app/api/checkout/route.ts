@@ -73,20 +73,30 @@ export async function POST(request: NextRequest) {
     }, 0)
     
     const subtotal = MAIN_PRODUCT_PRICE + orderBumpsTotal
-    const MINIMUM_ORDER_VALUE = 0.10 // Valor mínimo para gateways aceitarem
     
-    // Limitar desconto para nunca dar valor negativo ou zero
-    if (orderData.discount >= subtotal) {
-      console.warn(`⚠️ Desconto (R$ ${orderData.discount}) maior que subtotal (R$ ${subtotal}). Limitando...`)
-      orderData.discount = subtotal - MINIMUM_ORDER_VALUE
+    // REGRA DE OURO: Valor mínimo R$ 1,00 (não R$ 0,10)
+    // Appmax e gateways de pagamento exigem valor mínimo
+    const MINIMUM_ORDER_VALUE = 1.00
+    
+    // Garantir que discount é número com 2 casas decimais
+    let discount = parseFloat((orderData.discount || 0).toFixed(2))
+    
+    // Limitar desconto: total - desconto NUNCA < R$ 1,00
+    if (subtotal - discount < MINIMUM_ORDER_VALUE) {
+      console.warn(`⚠️ Desconto (R$ ${discount}) muito alto. Subtotal: R$ ${subtotal}. Limitando para deixar R$ 1,00...`)
+      discount = subtotal - MINIMUM_ORDER_VALUE
     }
     
-    const finalTotal = subtotal - orderData.discount
+    // Atualizar com valor seguro
+    orderData.discount = parseFloat(discount.toFixed(2))
+    
+    const finalTotal = parseFloat((subtotal - discount).toFixed(2))
     
     console.log('💰 Validação de preços:', {
       subtotal: subtotal.toFixed(2),
-      discount: orderData.discount.toFixed(2),
+      discount: discount.toFixed(2),
       finalTotal: finalTotal.toFixed(2),
+      minimumRequired: MINIMUM_ORDER_VALUE.toFixed(2),
       isValid: finalTotal >= MINIMUM_ORDER_VALUE
     })
     
@@ -94,10 +104,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Valor do pedido inválido após desconto',
+          error: `Valor do pedido (R$ ${finalTotal.toFixed(2)}) abaixo do mínimo (R$ ${MINIMUM_ORDER_VALUE.toFixed(2)})`,
           details: {
-            subtotal,
-            discount: orderData.discount,
+            subtotal: subtotal.toFixed(2),
+            discount: discount.toFixed(2),
             total: finalTotal
           }
         },

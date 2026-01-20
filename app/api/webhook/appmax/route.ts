@@ -129,24 +129,30 @@ export async function POST(request: NextRequest) {
       productsCount: products.length,
     })
 
+    // PROTEÇÃO: Se não houver email, é evento de falha (normal)
+    // Não retornar erro 400, apenas ignorar e retornar 200 para Appmax parar de reenviar
     if (!customerEmail) {
-      console.error('❌ Email do cliente não encontrado')
+      console.log('⚠️ Webhook ignorado: Sem dados de cliente (evento de falha ou PIX expirado)')
       
       if (webhookLog?.id) {
         await supabaseAdmin
           .from('webhooks_logs')
           .update({
             processed: true,
-            success: false,
-            error_message: 'Email não encontrado no payload',
+            success: true, // Sucesso = processado corretamente (ignorado)
+            error_message: 'Evento sem dados de cliente - ignorado (normal para falhas)',
             processed_at: new Date().toISOString(),
           })
           .eq('id', webhookLog.id)
       }
       
+      // Retorna 200 para Appmax não reenviar
       return NextResponse.json(
-        { error: 'Email não encontrado', receivedData: Object.keys(body) },
-        { status: 400 }
+        { 
+          message: 'Webhook processado - Evento sem cliente ignorado',
+          event: body.event || body.status || 'unknown'
+        },
+        { status: 200 }
       )
     }
 
