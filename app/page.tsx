@@ -1620,8 +1620,26 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto px-4">
-            {[
+          {/* Carousel de Especialidades */}
+          <div className="relative max-w-4xl mx-auto overflow-hidden py-4">
+            <motion.div 
+              className="flex gap-4"
+              animate={{
+                x: [0, -1600],
+              }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 20,
+                  ease: "linear",
+                },
+              }}
+            >
+              {/* Duplicar array para loop infinito */}
+              {[...Array(2)].map((_, dupIndex) => (
+                <React.Fragment key={dupIndex}>
+                  {[
               {
                 specialty: "Ginecologia",
                 color: "from-[#5DBEA3] to-[#80D4C3]",
@@ -1693,7 +1711,7 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="group h-full"
+                className="w-[260px] flex-shrink-0 group h-full"
               >
                 <Card3D className="h-full">
                   <div className="relative bg-white rounded-2xl p-4 border-2 border-gray-200 hover:border-brand-400 transition-all duration-300 shadow-lg hover:shadow-2xl h-full flex flex-col">
@@ -1731,20 +1749,35 @@ export default function LandingPage() {
                 </Card3D>
               </motion.div>
             ))}
+                </React.Fragment>
+              ))}
+            </motion.div>
           </div>
+
+          {/* Botão Ver Todas */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-8 text-center"
+          >
+            <button className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg transition-colors">
+              Ver todas as especialidades
+            </button>
+          </motion.div>
 
           {/* CTA no final */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16 text-center"
+            className="mt-12 text-center"
           >
-            <div className="bg-white rounded-2xl p-6 md:p-10 border-2 border-brand-200 shadow-xl max-w-3xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
+            <div className="bg-white rounded-2xl p-5 md:p-6 border-2 border-brand-200 shadow-xl max-w-xl mx-auto">
+              <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-3">
                 Não encontrou sua especialidade?
               </h3>
-              <p className="text-xl text-gray-700 mb-8">
+              <p className="text-base text-gray-700 mb-6">
                 O Gravador Médico é <span className="text-brand-600 font-bold">100% personalizável</span>. 
                 Configure o formato do prontuário exatamente como você precisa!
               </p>
@@ -1754,11 +1787,11 @@ export default function LandingPage() {
                 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 onClick={scrollToCheckout}
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#5DBEA3] via-[#80D4C3] to-[#5DBEA3] bg-[length:200%_100%] animate-gradient text-white px-10 md:px-14 py-5 md:py-6 rounded-full text-xl md:text-2xl font-black shadow-2xl hover:shadow-[#5DBEA3]/50 transition-all"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#5DBEA3] via-[#80D4C3] to-[#5DBEA3] bg-[length:200%_100%] animate-gradient text-white px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg font-black shadow-2xl hover:shadow-[#5DBEA3]/50 transition-all max-w-sm mx-auto"
               >
-                <Wand2 className="w-6 h-6" />
-                Personalizar para minha especialidade
-                <ArrowRight className="w-6 h-6" />
+                <Wand2 className="w-5 h-5" />
+                Personalizar especialidade
+                <ArrowRight className="w-5 h-5" />
               </motion.button>
             </div>
           </motion.div>
