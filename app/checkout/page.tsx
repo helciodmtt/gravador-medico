@@ -100,15 +100,16 @@ export default function CheckoutPage() {
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*', // Escuta INSERT, UPDATE e DELETE
           schema: 'public',
           table: 'sales',
           filter: `appmax_order_id=eq.${pixData.orderId}`,
         },
-        (payload) => {
+        (payload: any) => {
           console.log('🔔 Mudança detectada no banco:', payload)
           
-          if (payload.new && (payload.new.status === 'approved' || payload.new.status === 'paid')) {
+          const record = payload.new || payload.old
+          if (record && (record.status === 'approved' || record.status === 'paid')) {
             console.log('✅ Pagamento APROVADO! Redirecionando...')
             
             // Redireciona para página de obrigado
@@ -116,7 +117,9 @@ export default function CheckoutPage() {
           }
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('📡 Status da conexão Realtime:', status)
+      })
 
     // Cleanup ao desmontar
     return () => {
