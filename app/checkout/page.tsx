@@ -569,32 +569,32 @@ export default function CheckoutPage() {
       
       {/* Banner de Escassez no Topo */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white shadow-2xl">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            {/* Contador */}
-            <div className="flex items-center gap-3">
-              <Clock className="w-6 h-6 animate-pulse" />
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex items-center justify-center md:justify-between gap-4 flex-wrap">
+            {/* Contador - Centralizado no mobile */}
+            <div className="flex items-center gap-2 md:gap-3">
+              <Clock className="w-5 h-5 md:w-6 md:h-6 animate-pulse" />
               <div className="flex items-baseline gap-2">
                 <span className="text-sm md:text-base font-bold">Oferta expira em:</span>
-                <span className="text-3xl md:text-4xl font-black tabular-nums tracking-tight">
+                <span className="text-2xl md:text-4xl font-black tabular-nums tracking-tight">
                   {formatTime(timeLeft)}
                 </span>
               </div>
             </div>
 
-            {/* Infos importantes */}
-            <div className="flex items-center gap-4 md:gap-6 text-xs md:text-sm">
+            {/* Infos importantes - APENAS DESKTOP */}
+            <div className="hidden md:flex items-center gap-4 md:gap-6 text-xs md:text-sm">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 <span className="font-semibold">Compra 100% Segura</span>
               </div>
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4" />
-                <span className="font-semibold hidden sm:inline">Acesso Imediato</span>
+                <span className="font-semibold">Acesso Imediato</span>
               </div>
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4" />
-                <span className="font-semibold hidden md:inline">4 Bônus Grátis</span>
+                <span className="font-semibold">4 Bônus Grátis</span>
               </div>
             </div>
           </div>
@@ -612,7 +612,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Espaçamento para o banner fixo */}
-      <div className="h-20 md:h-24"></div>
+      <div className="h-16 md:h-24"></div>
 
       {/* Main Content */}
       <div className="container mx-auto max-w-7xl px-3 sm:px-4 py-6 md:py-12 pt-12 md:pt-16">
