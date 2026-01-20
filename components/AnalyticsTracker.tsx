@@ -3,14 +3,13 @@
 import { useEffect } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import UAParser from 'ua-parser-js'
 import { v4 as uuidv4 } from 'uuid'
 
 /**
  * 🚀 ANALYTICS TRACKER NÍVEL NASA
  * 
  * Sistema de rastreamento profissional que captura:
- * - Device/OS/Browser (via ua-parser-js)
+ * - Device/OS/Browser (detecção via user agent)
  * - Geolocalização (via API ipapi.co)
  * - UTM Parameters (campanhas de marketing)
  * - Facebook Cookies (_fbp, _fbc) para CAPI
@@ -68,15 +67,47 @@ export default function AnalyticsTracker() {
       }
 
       // ============================================
-      // 2. DEVICE/OS/BROWSER (ua-parser-js)
+      // 2. DEVICE/OS/BROWSER (Detecção Manual)
       // ============================================
-      const parser = UAParser(navigator.userAgent)
-      const result = parser
+      const userAgent = navigator.userAgent.toLowerCase()
+      
+      // Detectar tipo de dispositivo
+      let deviceType = 'desktop'
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent)) {
+        deviceType = 'tablet'
+      } else if (/mobile|iphone|ipod|android|blackberry|opera mini|iemobile|wpdesktop/i.test(userAgent)) {
+        deviceType = 'mobile'
+      }
 
-      const deviceType = result.device?.type || 'desktop' // mobile, tablet, desktop
-      const os = result.os?.name || 'Desconhecido' // iOS, Android, Windows, macOS
-      const browser = result.browser?.name || 'Desconhecido' // Chrome, Safari, Firefox
-      const browserVersion = result.browser?.version || ''
+      // Detectar OS
+      let os = 'Desconhecido'
+      if (/windows nt 10/i.test(userAgent)) os = 'Windows 10'
+      else if (/windows nt 11/i.test(userAgent)) os = 'Windows 11'
+      else if (/windows/i.test(userAgent)) os = 'Windows'
+      else if (/mac os x/i.test(userAgent)) os = 'macOS'
+      else if (/iphone|ipad|ipod/i.test(userAgent)) os = 'iOS'
+      else if (/android/i.test(userAgent)) os = 'Android'
+      else if (/linux/i.test(userAgent)) os = 'Linux'
+
+      // Detectar Browser
+      let browser = 'Desconhecido'
+      let browserVersion = ''
+      if (/edg\//i.test(userAgent)) {
+        browser = 'Edge'
+        browserVersion = userAgent.match(/edg\/(\d+)/i)?.[1] || ''
+      } else if (/chrome/i.test(userAgent) && !/edg/i.test(userAgent)) {
+        browser = 'Chrome'
+        browserVersion = userAgent.match(/chrome\/(\d+)/i)?.[1] || ''
+      } else if (/safari/i.test(userAgent) && !/chrome/i.test(userAgent)) {
+        browser = 'Safari'
+        browserVersion = userAgent.match(/version\/(\d+)/i)?.[1] || ''
+      } else if (/firefox/i.test(userAgent)) {
+        browser = 'Firefox'
+        browserVersion = userAgent.match(/firefox\/(\d+)/i)?.[1] || ''
+      } else if (/opera|opr\//i.test(userAgent)) {
+        browser = 'Opera'
+        browserVersion = userAgent.match(/(?:opera|opr)\/(\d+)/i)?.[1] || ''
+      }
 
       // ============================================
       // 3. UTM PARAMETERS (Campanhas de Marketing)
